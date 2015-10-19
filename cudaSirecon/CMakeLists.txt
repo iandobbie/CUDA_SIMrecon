@@ -11,11 +11,12 @@ if(WIN32)# OR APPLE)
 endif()
 
 if(WIN32)
-	set(PRIISM_LIB_PATH "${CMAKE_SOURCE_DIR}/priism-4.2.9/Win/win64/LIB")
-	include_directories("${CMAKE_SOURCE_DIR}/priism-4.2.9/Win/win64/INCLUDE/")
+	set(PRIISM_LIB_PATH "${CMAKE_SOURCE_DIR}/IVE/win64/LIB")
+	include_directories("${CMAKE_SOURCE_DIR}/IVE/win64/INCLUDE/")
+    link_directories ( ${PRIISM_LIB_PATH} )
     if(WITH_TIFF)
         include_directories( ${TIFF_INCLUDE_DIR} )
-        link_directories ( ${TIFF_LIBRARY} ) 
+        link_directories ( ${TIFF_LIBRARY} )
     endif(WITH_TIFF)
 elseif(APPLE)
 ## Assuming the builder's shell environment is already set up to use 64-bit Priism
@@ -30,14 +31,14 @@ endif(WIN32)
 
 if(WIN32)
   message(STATUS "PRIISM_LIB_PATH: " ${PRIISM_LIB_PATH})
-  find_library(IMLIB libimlib
-    PATHS ${PRIISM_LIB_PATH}
-    REQUIRED)
-  find_library(IVELIB libive
-    PATHS ${PRIISM_LIB_PATH}
-    REQUIRED)
+  # find_library(IMLIB libimlib.a
+  #   PATHS ${PRIISM_LIB_PATH}
+  #   REQUIRED)
+  # find_library(IVELIB ive
+  #   PATHS ${PRIISM_LIB_PATH}
+  #   REQUIRED)
 else(WIN32)
-  find_library(IMLIB imlib 
+  find_library(IMLIB imlib
     PATHS ${PRIISM_LIB_PATH}
     REQUIRED)
   find_library(IVELIB ive
@@ -82,7 +83,7 @@ elseif(APPLE)
 else ()
   CUDA_ADD_LIBRARY(
     cudaSirecon
-    ${SHARED_OR_NOT}
+#    ${SHARED_OR_NOT}
     cudaSirecon.cpp
   )
 endif()
@@ -114,14 +115,15 @@ if(WIN32)
       cudaSirecon
       gpuFunctions
       Buffer
-      ${IMLIB}
-      ${IVELIB}
+      # ${IMLIB}
+      # ${IVELIB}
+	  libimlib
+	  libive
       ${LAPACK}
       ${BLAS}
     )
   endif(WITH_TIFF)
 
-  CUDA_ADD_CUFFT_TO_TARGET(cudaSirecon)
   target_link_libraries(
     cudaSireconDriver
     cudaSirecon
@@ -134,7 +136,6 @@ if(WIN32)
   )
 else(WIN32)
   target_link_libraries(
-    cudaSireconDriver
     cudaSirecon
     gpuFunctions
     Buffer
@@ -147,10 +148,12 @@ else(WIN32)
     lapack
     ${TIFF_LIBRARIES}
     X11
-    nvidia-ml
+#    nvidia-ml
+  )
+  target_link_libraries(
+    cudaSireconDriver
+    cudaSirecon
   )
 endif(WIN32)
+CUDA_ADD_CUFFT_TO_TARGET(cudaSirecon)
 CUDA_ADD_CUFFT_TO_TARGET(cudaSireconDriver)
-
-
-
