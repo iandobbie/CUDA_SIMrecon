@@ -114,7 +114,7 @@ if(APPLE)
 endif()
 
 set(CUDA_NVCC_FLAGS
-  -gencode=arch=compute_20,code=sm_20;-gencode=arch=compute_30,code=sm_30;-gencode=arch=compute_35,code=sm_35)
+  -gencode=arch=compute_20,code=sm_20;-gencode=arch=compute_30,code=sm_30;-gencode=arch=compute_35,code=sm_35;-gencode=arch=compute_50,code=sm_50)
 
 if(WIN32)
   set(CUDA_NVCC_FLAGS
@@ -123,3 +123,4 @@ endif(WIN32)
 
 add_subdirectory(Buffers)
 add_subdirectory(cudaSirecon)
+
