@@ -19,13 +19,15 @@ if(WIN32)
         link_directories ( ${TIFF_LIBRARY} )
     endif(WITH_TIFF)
 elseif(APPLE)
-## Assuming the builder's shell environment is already set up to use 64-bit Priism
-	set(PRIISM_LIB_PATH "$ENV{IVE_BASE}/Darwin64/LIB")
-	include_directories("$ENV{IVE_BASE}/Darwin64/INCLUDE/")
+## Not assuming the builder's shell environment is already set up to use 64-bit Priism
+## But rather the priism/ was put in the locate described
+## in the instructions in the top CMakeLists.txt section 1.5
+	set(PRIISM_LIB_PATH "${CMAKE_SOURCE_DIR}/priism-4.4.0/Darwin/x86_64/LIB")
+	include_directories("${CMAKE_SOURCE_DIR}/priism-4.4.0/Darwin/x86_64/INCLUDE")
 else()
-## Assuming the builder's shell environment is already set up to use 64-bit Priism
-	set(PRIISM_LIB_PATH "$ENV{IVE_BASE}/Linux/x86_64/LIB")
-	include_directories("$ENV{IVE_BASE}/Linux/x86_64/INCLUDE/")
+## same as for apple - priism install location - works for chalkie666 
+	set(PRIISM_LIB_PATH "${CMAKE_SOURCE_DIR}/priism-4.4.0/Linux/x86_64/LIB")
+	include_directories("${CMAKE_SOURCE_DIR}/priism-4.4.0/Linux/x86_64/INCLUDE")
 endif(WIN32)
 
 
